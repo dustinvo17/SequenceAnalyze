@@ -14,7 +14,7 @@ function init(){
       return
     }
     const list = document.createElement('ul')
-    const results = sequence(input.value)
+    const results = sequence(input.value.toUpperCase())
    
        results.forEach(str =>{
       let item = document.createElement("li");
@@ -97,6 +97,6 @@ function sequence(seq){
 
   // MARTKQTARKS
 
-sequence('MARTKQTARKSTGGKAPRKQLATKAARKSAPATGGVKKPHRYRPGTVALREIRRYQKSTELLIRKLPFQRLVREIAQDFKTDLRFQSSAVMALQEASEAYLVGLFEDTNLCAIHAKRVTIMPKDIQLARRIRGERA')
+
 
 //
