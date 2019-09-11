@@ -1,4 +1,6 @@
 
+let Kdetails;
+let original =[];
 
 window.onload =init
 function init(){
@@ -8,23 +10,57 @@ function init(){
   const input = document.querySelector('textarea')
   
   const render = document.querySelector('.render')
+  const output = document.querySelector('.output')
+  
   buttonStart.addEventListener('click',function(){
     if(render.hasChildNodes() || !input.value){
      
       return
     }
+  
+  
     const list = document.createElement('ul')
-    const results = sequence(input.value.toUpperCase())
+    const listK =document.createElement('ul')
+    const mutateArr = sequence(input.value.toUpperCase())
+ 
+    document.querySelector('.number-k').innerHTML = 'Number of K: ' + Object.keys(Kdetails).length
+    Object.values(Kdetails).forEach(key =>{
+      let keyLi = document.createElement("li");
+      keyLi.innerHTML += 'K' + (key+1)
    
-       results.forEach(str =>{
+      listK.appendChild(keyLi)
+
+    })
+    output.append(listK)
+    
+       original.forEach(str =>{
       let item = document.createElement("li");
       item.innerHTML += str
       list.appendChild(item);
     })
-    render.append(list)
+    output.append(list)
+
+
+    const listLen =document.createElement('ul')
+    original.forEach(str =>{
+      let item2 = document.createElement("li");
+      item2.innerHTML += `Length: ${str.length}` 
+      listLen.appendChild(item2);
+    })
+    output.append(listLen)
+    
+        let lineList = document.createElement('ul')
+       mutateArr.forEach(str =>{
+      let elem = document.createElement("li");
+    
+      elem.innerHTML += str
+      lineList.appendChild(elem);
+    })
+    render.append(lineList)
     
    
   })
+
   buttonErase.addEventListener('click',function(){
     render.innerHTML = '';
     input.value =''
@@ -36,6 +72,12 @@ function init(){
 
 
 function sequence(seq){
+ 
+
+  if(seq.includes('\n')){
+    seq = seq.replace(/(\r\n|\n|\r)/gm, "")
+   
+  }
   if(seq.length <= 1){
     return
   }
@@ -50,6 +92,9 @@ function sequence(seq){
     }
     
   }
+
+  Kdetails = Object.assign({},indexOfK)
+  
   let part =''
   indexOfK = Object.values(indexOfK)
   let preIndex;
@@ -58,10 +103,12 @@ function sequence(seq){
     preIndex = pos - 6 >= 0 ? pos -6 : 0
     part = seq.slice(preIndex,pos+7)
     array.push(part)
+    original.push(part)
      const numOfk =part.split('K').length
     
     part = part.split('')
-    let indexToMutate =0
+ 
+    
     if(numOfk >2){
        for(let j = part.length-1; j >=0;j--){
       if(part[j] === 'K'){
@@ -80,6 +127,7 @@ function sequence(seq){
      
     
     }
+   
    
     
   })
