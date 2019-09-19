@@ -5,17 +5,23 @@ body {
     display:flex;
     flex-direction: column;
     justify-content: center;
-    align-items: center;
+    padding:1rem;
+    align-items: flex-start;
 }
 .output {
-    display:flex;
-    justify-content: center;
-    width:100%;
-    padding:0 2rem;
+    width:100vw;
+    display:grid;
+    grid-template-columns: repeat(7,200px);
+    margin-top:2rem;
 }
-.number-k {
 
+#pos{
+    color:red;
 }
-.render {
-    order:4;
+div {
+    text-align: center;
+    
+}
+.title {
+    font-weight:900;
 }

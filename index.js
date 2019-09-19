@@ -1,69 +1,56 @@
 
 let Kdetails;
 let original =[];
-
+let mutateObject = {}
 window.onload =init
 function init(){
 
-  const buttonStart = document.querySelector('.start')
-  const buttonErase = document.querySelector('.erase')
-  const input = document.querySelector('textarea')
+  const buttonStart = $('.start')
+  const buttonErase = $('.erase')
+  const input = $('textarea')
   
-  const render = document.querySelector('.render')
-  const output = document.querySelector('.output')
+
+  const output =$('.output')
   
-  buttonStart.addEventListener('click',function(){
-    if(render.hasChildNodes() || !input.value){
+  buttonStart.on('click',function(){
+ 
+    if(!input.val() || $('#pos').length > 0){
      
       return
     }
+    console.log(input.val())
+    sequence(input.val())
+    console.log(Kdetails)
+    output.append(`<div class="title">${'Number of K: ' + Object.keys(Kdetails).length}</div>`)
+    output.append(`<ul id="pos">${returnItem(Object.values(Kdetails))}</ul>`)
+    output.append(`<ul>${returnItem(original)}</ul>`)
+    output.append(`<ul id="pos">${returnItem(Object.keys(mutateObject))}</ul>`)
+    output.append(`<ul>${returnItem(Object.values(mutateObject))}</ul>`)
+    output.append(`<ul>${returnLen(Object.values(mutateObject))}</ul>`)
+    output.append(`<div class="title">Total number of sequences: ${Object.values(mutateObject).length}</div>`)
+   function returnLen(list){
+     return list.map(item =>{
+       return `<li>${item.length}</li>`
+     }).join('')
+   }
+   function returnItem(list){
+      return list.map(item =>{
+        if(list[0] === Object.values(Kdetails)[0]){
+           return `<li>K${item+1}</li>`
+        }
+        return `<li>${item}</li>`
+      }).join('')
+   }
+
   
-  
-    const list = document.createElement('ul')
-    const listK =document.createElement('ul')
-    const mutateArr = sequence(input.value.toUpperCase())
- 
-    document.querySelector('.number-k').innerHTML = 'Number of K: ' + Object.keys(Kdetails).length
-    Object.values(Kdetails).forEach(key =>{
-      let keyLi = document.createElement("li");
-      keyLi.innerHTML += 'K' + (key+1)
-   
-      listK.appendChild(keyLi)
-
-    })
-    output.append(listK)
     
-       original.forEach(str =>{
-      let item = document.createElement("li");
-      item.innerHTML += str
-      list.appendChild(item);
-    })
-    output.append(list)
-
-
-    const listLen =document.createElement('ul')
-    original.forEach(str =>{
-      let item2 = document.createElement("li");
-      item2.innerHTML += `Length: ${str.length}` 
-      listLen.appendChild(item2);
-    })
-    output.append(listLen)
-    
-        let lineList = document.createElement('ul')
-       mutateArr.forEach(str =>{
-      let elem = document.createElement("li");
-    
-      elem.innerHTML += str
-      lineList.appendChild(elem);
-    })
-    render.append(lineList)
     
    
   })
 
-  buttonErase.addEventListener('click',function(){
-    render.innerHTML = '';
-    input.value =''
+  buttonErase.on('click',function(){
+    output.text('') 
+    input.val('')
 
   })
   
@@ -105,28 +92,58 @@ function sequence(seq){
     array.push(part)
     original.push(part)
      const numOfk =part.split('K').length
+      /// mutate and add label 
+    const label = 'K' + (pos+1)
     
+    
+    mutateObject[label+'_WT'] = part
+
     part = part.split('')
- 
+     let indexMiddle = part.length - 7
+     part[indexMiddle] = 'A'
+    mutateObject[label+'_control-1'] = part.join('')
+    part[indexMiddle] ='R'
+    mutateObject[label+'_control-2'] = part.join('')
     
-    if(numOfk >2){
-       for(let j = part.length-1; j >=0;j--){
-      if(part[j] === 'K'){
-        part[j] = 'A'
-        indexToMutate = j
-        break;
+    // turn part into orignal K
+     part[indexMiddle] ='K'
+    
+
+      
+    // working with control 3 and up
+    let control = 3
+    if(numOfk >=2){
+       let partControl = [...part]
+      for(let i = 0; i < partControl.length;i++){
+        if(i !== indexMiddle && partControl[i] === 'K'){
+          partControl[i] = 'R'
+          mutateObject[label+`_control-${control}`] = partControl.join('')
+          control++
         }
       }
-    part = part.join('')
-    array.push(part)
-    part = part.split('')
-    part[indexToMutate] = 'R'
-     part = part.join('')
-    array.push(part)
-
+      let newPart = [...part]
+     
+      let check = 0
+      for(let i = newPart.length-1;i >= 0;i--){
+        if(newPart[i] === 'K'){
+          check++
+        }
+        if(check > 1 && newPart[i] ==='K'){
+          newPart[i] = 'R'
+        }
+       
+      }
+      mutateObject[label+`_control-${control}`] = newPart.join('')
+   
+   
+      
+     
      
     
     }
+  
+
+   
    
    
     
