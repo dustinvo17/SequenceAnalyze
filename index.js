@@ -28,6 +28,8 @@ function init(){
     output.append(`<ul>${returnItem(Object.values(mutateObject))}</ul>`)
     output.append(`<ul>${returnLen(Object.values(mutateObject))}</ul>`)
     output.append(`<div class="title">Total number of sequences: ${Object.values(mutateObject).length}</div>`)
+   
+        
    function returnLen(list){
      return list.map(item =>{
        return `<li>${item.length}</li>`
@@ -49,8 +51,16 @@ function init(){
   })
 
   buttonErase.on('click',function(){
+    let pattern =`<div></div>
+         <div class="title">Position of K</div>
+           <div class="title"> Sequence N' to C'</div>
+           <div class="title">Sequence ID</div>
+           <div class="title">Sequence N' to C'</div>
+          <div class="title">Length</div>    
+        <div></div>`
     output.text('') 
     input.val('')
+    output.append(pattern)
 
   })
   
