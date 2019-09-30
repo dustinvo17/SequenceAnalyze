@@ -32,16 +32,22 @@ function init(){
     sequence(input.val())
 
     let listOfVIL =[]
+    let listofNumK =[]
         // calculate number of VIL in each str
       Object.values(mutateObject).forEach(str =>{
            let numVIL = 0;
+           let numK =0
           str.toLowerCase().split('').forEach(char =>{
             if(char ==='v' || char ==='i' || char ==='l'){
             numVIL++
             }
+            if(char ==='k'){
+              numK++
+            }
       })
     
       listOfVIL.push(numVIL)
+      listofNumK.push(numK)
     })
     function renderListOfVIL(list){
         count = 1
@@ -66,13 +72,15 @@ function init(){
     }
     
 
-    output.append(`<div class="title">${'Number of K: ' + Object.keys(Kdetails).length}</div>`)
+   
     output.append(`<ul id="pos">${returnItem(Object.values(Kdetails))}</ul>`)
 
     output.append(`<ul id="pos">${returnItem(Object.keys(mutateObject))}</ul>`)
     output.append(`<ul>${returnItem(Object.values(mutateObject))}</ul>`)
     output.append(`<ul>${renderListOfVIL(listOfVIL)}</ul>`)
+    output.append(`<ul>${renderListOfVIL(listofNumK)}</ul>`)
     output.append(`<ul>${returnLen(Object.values(mutateObject))}</ul>`)
+     output.append(`<div class="title">${'Total number of K: ' + Object.keys(Kdetails).length}</div>`)
     output.append(`<div class="title">Total number of sequences: ${Object.values(mutateObject).length}</div>`)
    output.append(`<div class="title">Total number of V, I, L: ${numberVIL}</div>`)
   
@@ -126,13 +134,14 @@ function init(){
   })
 
   buttonErase.on('click',function(){
-    let pattern =`<div></div>
+    let pattern =`
          <div  class="title">Position of K</div>  
            <div class="title">Sequence ID</div>
            <div class="title">Sequence N' to C'</div>
            <div class="title">Number of V, I, L in each sequence</div> 
+            <div class="title">Number of K in each sequence</div> 
           <div class="title">Length</div>    
-        
+          <div></div>
           <div></div> 
            <div></div>`
     output.text('') 
@@ -178,10 +187,11 @@ function sequence(seq){
     part = seq.slice(preIndex,pos+7)
     array.push(part)
     original.push(part)
-     const numOfk =part.split('K').length
+     const numOfk =part.split('K').length -1
       /// mutate and add label 
+    console.log(numOfk)
     const label = 'K' + (pos+1)
-    
+   
     
     mutateObject[label+'_WT'] = part
 
@@ -196,7 +206,9 @@ function sequence(seq){
 
 
     //  working with control 2 and up
-     let partControl = [...part]
+    
+    if(numOfk >=2){
+      let partControl = [...part]
       for(let i = 0;i<partControl.length;i++ ){
         if(partControl[i] === 'K' && i !== indexMiddle){
           partControl[i] = 'r'
@@ -215,6 +227,8 @@ function sequence(seq){
         }
       }
       mutateObject[label+`_control-3`] = partControl.join('')
+    }
+     
 
 
 

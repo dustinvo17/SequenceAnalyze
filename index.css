@@ -12,7 +12,7 @@ body {
 .output {
     width:100vw;
     display:grid;
-    grid-template-columns: repeat(8,200px);
+    grid-template-columns: repeat(9,200px);
 
     margin-top:2rem;
 }
