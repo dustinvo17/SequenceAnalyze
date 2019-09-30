@@ -2,6 +2,7 @@
 let Kdetails;
 let original =[];
 let mutateObject = {}
+
 window.onload =init
 function init(){
 
@@ -18,27 +19,101 @@ function init(){
      
       return
     }
-    console.log(input.val())
+    let numberVIL = 0;
+     input.val().toLowerCase().split('').map((char)=>{
+      if(char ==='v' || char ==='i' || char ==='l'){
+        numberVIL++
+      }
+    })
+
+    
+    
+    console.log(input.val().toLowerCase())
     sequence(input.val())
-    console.log(Kdetails)
+
+    let listOfVIL =[]
+        // calculate number of VIL in each str
+      Object.values(mutateObject).forEach(str =>{
+           let numVIL = 0;
+          str.toLowerCase().split('').forEach(char =>{
+            if(char ==='v' || char ==='i' || char ==='l'){
+            numVIL++
+            }
+      })
+    
+      listOfVIL.push(numVIL)
+    })
+    function renderListOfVIL(list){
+        count = 1
+       
+        return list.map((item,index) =>{
+        
+          if(count === 5){
+          count = 1
+          }
+          if(count === 1){
+              count++
+            return `<li class="number-vil">${item}</li>`
+
+          }
+          else{
+               count++
+            return '<li class="vil">Duplicate</li>'
+          }
+        
+          
+        }).join('')
+    }
+    
+
     output.append(`<div class="title">${'Number of K: ' + Object.keys(Kdetails).length}</div>`)
     output.append(`<ul id="pos">${returnItem(Object.values(Kdetails))}</ul>`)
-    output.append(`<ul>${returnItem(original)}</ul>`)
+
     output.append(`<ul id="pos">${returnItem(Object.keys(mutateObject))}</ul>`)
     output.append(`<ul>${returnItem(Object.values(mutateObject))}</ul>`)
+    output.append(`<ul>${renderListOfVIL(listOfVIL)}</ul>`)
     output.append(`<ul>${returnLen(Object.values(mutateObject))}</ul>`)
     output.append(`<div class="title">Total number of sequences: ${Object.values(mutateObject).length}</div>`)
-   
-        
+   output.append(`<div class="title">Total number of V, I, L: ${numberVIL}</div>`)
+  
    function returnLen(list){
      return list.map(item =>{
        return `<li>${item.length}</li>`
      }).join('')
    }
+   // turn charecter bold
+   function boldChar(myStr){
+
+   }
    function returnItem(list){
+   
       return list.map(item =>{
+        
+        // return position of K
         if(list[0] === Object.values(Kdetails)[0]){
            return `<li>K${item+1}</li>`
+        }
+        // return mutate sq
+
+        // validate sequnce N to C
+        if(!/\d/.test(item)){
+            /// hight middle K and R with color
+          let len = item.split('').length
+          return `<li>${item.split('').map((char,index) =>{
+              if(index === (len -7)){
+                return `<span class=${char === 'K'?'k':'r'}>${char}</span>`
+                  
+                 
+                
+              
+              
+              }
+              if(char === 'r'){
+                 return `<span class="r">${char}</span>`
+              }
+              return char
+          }).join('')}</li>`
+          
         }
         return `<li>${item}</li>`
       }).join('')
@@ -52,12 +127,14 @@ function init(){
 
   buttonErase.on('click',function(){
     let pattern =`<div></div>
-         <div class="title">Position of K</div>
-           <div class="title"> Sequence N' to C'</div>
+         <div  class="title">Position of K</div>  
            <div class="title">Sequence ID</div>
            <div class="title">Sequence N' to C'</div>
+           <div class="title">Number of V, I, L in each sequence</div> 
           <div class="title">Length</div>    
-        <div></div>`
+        
+          <div></div> 
+           <div></div>`
     output.text('') 
     input.val('')
     output.append(pattern)
@@ -110,47 +187,70 @@ function sequence(seq){
 
     part = part.split('')
      let indexMiddle = part.length - 7
-     part[indexMiddle] = 'A'
+     middleIndex = part.length - 7
+    part[indexMiddle] ='r'
     mutateObject[label+'_control-1'] = part.join('')
-    part[indexMiddle] ='R'
-    mutateObject[label+'_control-2'] = part.join('')
     
     // turn part into orignal K
      part[indexMiddle] ='K'
-    
+
+
+    //  working with control 2 and up
+     let partControl = [...part]
+      for(let i = 0;i<partControl.length;i++ ){
+        if(partControl[i] === 'K' && i !== indexMiddle){
+          partControl[i] = 'r'
+           
+ 
+        }
+      
+      }
+      mutateObject[label+`_control-2`] = partControl.join('')
+      let secondPart = [...part]
+      for(let i = 0 ; i< secondPart.length;i++){
+          if(partControl[i] === 'K'){
+           partControl[i] = 'r'
+           
+ 
+        }
+      }
+      mutateObject[label+`_control-3`] = partControl.join('')
+
+
+
 
       
     // working with control 3 and up
-    let control = 3
-    if(numOfk >=2){
-       let partControl = [...part]
-      for(let i = 0; i < partControl.length;i++){
-        if(i !== indexMiddle && partControl[i] === 'K'){
-          partControl[i] = 'R'
-          mutateObject[label+`_control-${control}`] = partControl.join('')
-          control++
-        }
-      }
-      let newPart = [...part]
+    // let control = 3
+    // if(numOfk >=2){
+    //    let partControl = [...part]
+    //   for(let i = 0; i < partControl.length;i++){
+    //     if(i !== indexMiddle && partControl[i] === 'K'){
+    //       partControl[i] = 'R'
+    //       mutateObject[label+`_control-${control}`] = partControl.join('')
+    //       control++
+    //     }
+    //   }
+    //   let newPart = [...part]
      
-      let check = 0
-      for(let i = newPart.length-1;i >= 0;i--){
-        if(newPart[i] === 'K'){
-          check++
-        }
-        if(check > 1 && newPart[i] ==='K'){
-          newPart[i] = 'R'
-        }
+    //   let check = 0
+    //   for(let i = newPart.length-1;i >= 0;i--){
+    //     if(newPart[i] === 'K'){
+    //       check++
+    //     }
+    //     if(check > 1 && newPart[i] ==='K'){
+    //       newPart[i] = 'R'
+    //     }
        
-      }
-      mutateObject[label+`_control-${control}`] = newPart.join('')
+    //   }
+    //   mutateObject[label+`_control-${control}`] = newPart.join('')
    
    
       
      
      
     
-    }
+    // }
   
 
    
