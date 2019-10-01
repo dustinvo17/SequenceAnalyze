@@ -87,7 +87,9 @@ function init(){
    output.append(`<div class="title">Total number of V, I, L: ${numberVIL}</div>`)
   
    function returnLen(list){
+    
      return list.map((item,index) =>{
+        
        if(indexofWT.includes(index)){
            return `<li>${item.length}</li>`
        }
@@ -196,9 +198,9 @@ function sequence(seq){
     let newArr = [...newPart]
 
   
-    preIndex = pos - 6
+    preIndex = pos - 6 >= 0 ? pos - 6 : 0
  
-    part = newArr.slice(pos-6,pos+7).join('')
+    part = newArr.slice(preIndex,pos+7).join('')
     
     
           array.push(part)
@@ -222,13 +224,9 @@ function sequence(seq){
     part = part.split('')
     let indexMiddle
      
-    if(!newPart[pos+7]){
-      
-      indexMiddle = part.length - 1
-    }
-    else {
+   
       indexMiddle = part.length - 7
-    }
+    
     part[indexMiddle] ='r'
     mutateObject[label+'_control-1'] = part.join('')
     
@@ -300,7 +298,7 @@ function sequence(seq){
 
    
    
-   
+   console.log(mutateObject)
     
   })
  return array
