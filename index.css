@@ -42,10 +42,9 @@ li {
     margin-bottom:5px 0;
 }
 .number-vil {
+    color:red;
     background:yellow;
-   
 }
-.vil {
-    visibility: hidden;
-    
+.duplicate {
+    opacity: 0;
 }

@@ -30,7 +30,13 @@ function init(){
     
     console.log(input.val().toLowerCase())
     sequence(input.val())
-
+     let indexofWT = []
+     Object.keys(mutateObject).forEach((key,index) =>{
+        if(key.includes('WT')){
+          indexofWT.push(index)
+        }
+    })
+    console.log(indexofWT)
     let listOfVIL =[]
     let listofNumK =[]
         // calculate number of VIL in each str
@@ -45,27 +51,23 @@ function init(){
               numK++
             }
       })
-    
-      listOfVIL.push(numVIL)
       listofNumK.push(numK)
+      listOfVIL.push(numVIL)
+      
     })
     function renderListOfVIL(list){
-        count = 1
+      
        
         return list.map((item,index) =>{
-        
-          if(count === 5){
-          count = 1
-          }
-          if(count === 1){
-              count++
-            return `<li class="number-vil">${item}</li>`
+           
+            if(indexofWT.includes(index)){
+               return `<li class="number-vil">${item}</li>`
+            }
+            return `<li class="duplicate">Duplicate</li>`
+           
 
-          }
-          else{
-               count++
-            return '<li class="vil">Duplicate</li>'
-          }
+          
+         
         
           
         }).join('')
@@ -85,8 +87,12 @@ function init(){
    output.append(`<div class="title">Total number of V, I, L: ${numberVIL}</div>`)
   
    function returnLen(list){
-     return list.map(item =>{
-       return `<li>${item.length}</li>`
+     return list.map((item,index) =>{
+       if(indexofWT.includes(index)){
+           return `<li>${item.length}</li>`
+       }
+       return `<li class="duplicate">duplicate</li>`
+      
      }).join('')
    }
    // turn charecter bold
