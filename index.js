@@ -28,7 +28,7 @@ function init(){
 
     
     
-    console.log(input.val().toLowerCase())
+
     sequence(input.val())
      let indexofWT = []
      Object.keys(mutateObject).forEach((key,index) =>{
@@ -36,7 +36,7 @@ function init(){
           indexofWT.push(index)
         }
     })
-    console.log(indexofWT)
+
     let listOfVIL =[]
     let listofNumK =[]
         // calculate number of VIL in each str
@@ -113,8 +113,10 @@ function init(){
         if(!/\d/.test(item)){
             /// hight middle K and R with color
           let len = item.split('').length
+          let specStr = item.split('').length == 12 ? 6:7
+          let minus = item.split('').length > 10 ? specStr:1
           return `<li>${item.split('').map((char,index) =>{
-              if(index === (len -7)){
+              if(index === len -minus){
                 return `<span class=${char === 'K'?'k':'r'}>${char}</span>`
                   
                  
@@ -164,7 +166,8 @@ function sequence(seq){
  
 
   if(seq.includes('\n')){
-    seq = seq.replace(/(\r\n|\n|\r)/gm, "")
+    seq = seq.replace(/(\r\n|\n|\r)/gm, "").split(' ').join('')
+  
    
   }
   if(seq.length <= 1){
@@ -182,28 +185,50 @@ function sequence(seq){
     
   }
 
-  Kdetails = Object.assign({},indexOfK)
+  Kdetails = {...indexOfK}
   
   let part =''
   indexOfK = Object.values(indexOfK)
   let preIndex;
-
+  newPart = seq.split('')
+  
   indexOfK.forEach(pos =>{
-    preIndex = pos - 6 >= 0 ? pos -6 : 0
-    part = seq.slice(preIndex,pos+7)
-    array.push(part)
-    original.push(part)
-     const numOfk =part.split('K').length -1
-      /// mutate and add label 
-    console.log(numOfk)
+    let newArr = [...newPart]
+
+  
+    preIndex = pos - 6
+ 
+    part = newArr.slice(pos-6,pos+7).join('')
+    
+    
+          array.push(part)
+          original.push(part)
+    
+
+  
+  
     const label = 'K' + (pos+1)
-   
+    let numOfk =0;
+    for(let k = 0 ; k < part.split('').length;k++){
+      if(part.split('')[k] === 'K'){
+        numOfk++
+      }
+    }
+    
+      /// mutate and add label 
     
     mutateObject[label+'_WT'] = part
 
     part = part.split('')
-     let indexMiddle = part.length - 7
-     middleIndex = part.length - 7
+    let indexMiddle
+     
+    if(!newPart[pos+7]){
+      
+      indexMiddle = part.length - 1
+    }
+    else {
+      indexMiddle = part.length - 7
+    }
     part[indexMiddle] ='r'
     mutateObject[label+'_control-1'] = part.join('')
     
